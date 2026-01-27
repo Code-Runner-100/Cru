@@ -1,0 +1,23 @@
+query GetRangeByTopic($start: timestamp!, $end: timestamp!, $topicPrefix: String!) {
+  vw_mqtt_parsed(
+    where: {
+      time: { _gte: $start, _lt: $end }
+      topic: { _ilike: $topicPrefix }
+    }
+    order_by: { time: asc }
+  ) {
+    topic
+    time
+    v_array
+  }
+}
+
+
+{
+  "start": "2026-01-22 20:04:40",
+  "end":   "2026-01-22 20:05:00",
+  "topicPrefix": "SEL-Stream-Server-532063/WING D/waveform/%"
+}
+
+
+=============================================
