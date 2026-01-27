@@ -5,17 +5,19 @@ query GetRangeByTopic($start: timestamp!, $end: timestamp!, $topicPrefix: String
       topic: { _ilike: $topicPrefix }
     }
     order_by: { time: asc }
+    limit: 10
   ) {
-    topic
     time
+    topic
     v_array
   }
 }
 
 
+
 {
-  "start": "2026-01-22 20:04:40",
-  "end":   "2026-01-22 20:05:00",
+  "start": "2026-01-22 20:20:50",
+  "end":   "2026-01-22 20:20:55",
   "topicPrefix": "SEL-Stream-Server-532063/WING D/waveform/%"
 }
 
