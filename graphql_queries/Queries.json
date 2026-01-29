@@ -23,3 +23,19 @@ query GetRangeByTopic($start: timestamp!, $end: timestamp!, $topicPrefix: String
 
 
 =============================================
+
+CREATE OR REPLACE VIEW public.vw_mqtt_parsed AS
+WITH s AS (
+  SELECT time, topic, value::jsonb AS payload
+  FROM mqtt_consumer
+  WHERE value IS NOT NULL
+)
+SELECT
+  time,
+  topic,
+  payload,
+  (payload ->> 'rate')::int AS rate,
+  (payload -> 'timestamps' ->> 0)::timestamptz AS sample_ts,
+  (payload -> 'streams' -> 0 ->> 'n') AS stream_name,
+  (payload -> 'streams' -> 0 -> 'v') AS v_array
+FROM s;
