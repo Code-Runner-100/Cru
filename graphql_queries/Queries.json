@@ -39,3 +39,22 @@ SELECT
   (payload -> 'streams' -> 0 ->> 'n') AS stream_name,
   (payload -> 'streams' -> 0 -> 'v') AS v_array
 FROM s;
+
+
+====================== Pruning ========================
+DO $$
+DECLARE
+  rows_deleted bigint;
+BEGIN
+  LOOP
+    DELETE FROM mqtt_consumer
+    WHERE time < now() - interval '30 days'
+    LIMIT 50000;
+
+    GET DIAGNOSTICS rows_deleted = ROW_COUNT;
+    EXIT WHEN rows_deleted = 0;
+
+    PERFORM pg_sleep(0.2); -- be nice to the DB
+  END LOOP;
+END $$;
+
